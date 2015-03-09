@@ -11,7 +11,7 @@ class Album
   end
 
   def id
-    "#{@id}"
+    @id
   end
 
   def title
@@ -29,10 +29,11 @@ class Album
   def duration_min
     album_duration = 0
     @tracks.each do |track|
-      album_duration += track[:duration_ms].to_f
+      album_duration += track.duration_ms.to_f
     end
-    album_duration /= (1000 * 60)
-    album_duration.round(2)
+    album_duration /= 1000
+    # used time class to convert seconds into minutes
+    Time.at(album_duration).strftime("%M:%S")
   end
 
 
@@ -42,10 +43,39 @@ class Album
     summary += "#{duration_min}\nTracks:\n"
     # binding.pry
     @tracks.each do |track|
-      summary += "- #{track[:title]}\n"
+      summary += "- #{track.title}\n"
     end
     "#{summary}\n"
-
   end
 
+end
+
+class Track
+  def initialize(album_id, id, title, track_number, duration_ms)
+    @album_id = album_id
+    @id = id
+    @title = title
+    @track_number = track_number
+    @duration_ms = duration_ms
+  end
+
+  def album_id
+    @album_id
+  end
+
+  def id
+    @id
+  end
+
+  def title
+    @title
+  end
+
+  def track_number
+    @track_number
+  end
+
+  def duration_ms
+    @duration_ms
+  end
 end
